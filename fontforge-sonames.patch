@@ -1,0 +1,195 @@
+--- fontforge-20040404/fontforge/freetype.c.orig	2003-07-01 22:38:00.000000000 +0200
++++ fontforge-20040404/fontforge/freetype.c	2003-08-08 23:03:00.000000000 +0200
+@@ -132,7 +132,7 @@
+ # endif
+ 
+ static int freetype_init_base() {
+-    libfreetype = dlopen("libfreetype" SO_EXT,RTLD_LAZY);
++    libfreetype = dlopen(LIBFREETYPE_SONAME,RTLD_LAZY);
+     if ( libfreetype==NULL )
+ return( false );
+ 
+--- fontforge-20040404/fontforge/start.c.orig	2003-07-23 22:39:19.000000000 +0200
++++ fontforge-20040404/fontforge/start.c	2003-08-08 23:07:07.000000000 +0200
+@@ -68,10 +68,10 @@
+ #else
+     const void *libuninames=NULL;
+ # ifdef LIBDIR
+-    libuninames = dlopen( LIBDIR "/libuninameslist" SO_EXT,RTLD_LAZY);
++    libuninames = dlopen( LIBDIR "/" LIBUNINAMESLIST_SONAME,RTLD_LAZY);
+ # endif
+     if ( libuninames==NULL )
+-	libuninames = dlopen( "libuninameslist" SO_EXT,RTLD_LAZY);
++	libuninames = dlopen( LIBUNINAMESLIST_SONAME,RTLD_LAZY);
+     if ( libuninames!=NULL )
+ 	_UnicodeNameAnnot = dlsym(libuninames,"UnicodeNameAnnot");
+ #endif
+--- fontforge-20040404/fontforge/svg.c.orig	2003-08-04 04:51:03.000000000 +0200
++++ fontforge-20040404/fontforge/svg.c	2003-08-08 23:07:28.000000000 +0200
+@@ -519,7 +519,7 @@
+     if ( xmltested )
+ return( libxml!=NULL );
+ 
+-    libxml = dlopen("libxml2" SO_EXT,RTLD_LAZY);
++    libxml = dlopen(LIBXML2_SONAME,RTLD_LAZY);
+     xmltested = true;
+     if ( libxml==NULL )
+ return( false );
+--- pfaedit-030803/gdraw/gchardlg.c.orig	2003-03-11 01:02:55.000000000 +0100
++++ pfaedit-030803/gdraw/gchardlg.c	2003-08-08 22:55:16.000000000 +0200
+@@ -345,10 +345,10 @@
+ #else
+     DL_CONST void *libuninames=NULL;
+ # ifdef LIBDIR
+-    libuninames = dlopen( LIBDIR "/libuninameslist" SO_EXT,RTLD_LAZY);
++    libuninames = dlopen( LIBDIR "/" LIBUNINAMESLIST_SONAME,RTLD_LAZY);
+ # endif
+     if ( libuninames==NULL )
+-	libuninames = dlopen( "libuninameslist" SO_EXT,RTLD_LAZY);
++	libuninames = dlopen( LIBUNINAMESLIST_SONAME,RTLD_LAZY);
+     if ( libuninames!=NULL )
+ 	_UnicodeNameAnnot = dlsym(libuninames,"UnicodeNameAnnot");
+ #endif
+--- pfaedit-030803/gdraw/gimagereadgif.c.orig	2003-03-11 00:37:19.000000000 +0100
++++ pfaedit-030803/gdraw/gimagereadgif.c	2003-08-08 22:55:56.000000000 +0200
+@@ -48,9 +48,7 @@
+ static int loadgif() {
+     char *err;
+ 
+-    libgif = dlopen("libungif" SO_EXT,RTLD_LAZY);
+-    if ( libgif==NULL )
+-	libgif = dlopen("libgif" SO_EXT,RTLD_LAZY);
++    libgif = dlopen(LIBUNGIF_SONAME,RTLD_LAZY);
+     if ( libgif==NULL ) {
+ 	GDrawIError("%s", dlerror());
+ return( 0 );
+--- pfaedit-030803/gdraw/gimagereadjpeg.c.orig	2003-03-11 00:37:19.000000000 +0100
++++ pfaedit-030803/gdraw/gimagereadjpeg.c	2003-08-08 22:56:50.000000000 +0200
+@@ -52,7 +52,7 @@
+ static int loadjpeg() {
+     char *err;
+ 
+-    libjpeg = dlopen("libjpeg" SO_EXT,RTLD_LAZY);
++    libjpeg = dlopen(LIBJPEG_SONAME,RTLD_LAZY);
+     if ( libjpeg==NULL ) {
+ 	GDrawIError("%s", dlerror());
+ return( 0 );
+--- pfaedit-030803/gdraw/gimagereadpng.c.orig	2003-03-11 00:37:19.000000000 +0100
++++ pfaedit-030803/gdraw/gimagereadpng.c	2003-08-08 23:35:01.000000000 +0200
+@@ -59,9 +59,9 @@
+ 
+ static int loadpng() {
+ #  if !defined(_LIBPNG12)
+-    libpng = dlopen("libpng" SO_EXT,RTLD_LAZY);
++    libpng = dlopen(LIBPNG_SONAME,RTLD_LAZY);
+ #  else		/* After version 1.2.1 (I think) dynamic libpng is called libpng12 */
+-    libpng = dlopen("libpng12" SO_EXT,RTLD_LAZY);
++    libpng = dlopen(LIBPNG12_SONAME,RTLD_LAZY);
+ #  endif
+     if ( libpng==NULL ) {
+ 	GDrawIError("%s", dlerror());
+--- pfaedit-030803/gdraw/gimagereadtiff.c.orig	2003-03-11 00:37:19.000000000 +0100
++++ pfaedit-030803/gdraw/gimagereadtiff.c	2003-08-08 22:57:41.000000000 +0200
+@@ -47,7 +47,7 @@
+ static int (*_TIFFClose)(TIFF *);
+ 
+ static int loadtiff() {
+-    libtiff = dlopen("libtiff" SO_EXT,RTLD_LAZY);
++    libtiff = dlopen(LIBTIFF_SONAME,RTLD_LAZY);
+     if ( libtiff==NULL ) {
+ 	GDrawIError("%s", dlerror());
+ return( 0 );
+--- pfaedit-030803/gdraw/gimagewritejpeg.c.orig	2003-03-11 00:37:19.000000000 +0100
++++ pfaedit-030803/gdraw/gimagewritejpeg.c	2003-08-08 22:58:06.000000000 +0200
+@@ -55,7 +55,7 @@
+ static int loadjpeg() {
+     char *err;
+ 
+-    libjpeg = dlopen("libjpeg" SO_EXT,RTLD_LAZY);
++    libjpeg = dlopen(LIBJPEG_SONAME,RTLD_LAZY);
+     if ( libjpeg==NULL ) {
+ 	GDrawIError("%s", dlerror());
+ return( 0 );
+--- pfaedit-030803/gdraw/gimagewritepng.c.orig	2003-03-11 00:37:19.000000000 +0100
++++ pfaedit-030803/gdraw/gimagewritepng.c	2003-08-08 23:35:28.000000000 +0200
+@@ -53,9 +53,9 @@
+ 
+ static int loadpng() {
+ #  if !defined(_LIBPNG12)
+-    libpng = dlopen("libpng" SO_EXT,RTLD_LAZY);
++    libpng = dlopen(LIBPNG_SONAME,RTLD_LAZY);
+ #  else		/* After version 1.2.1 (I think) dynamic libpng is called libpng12 */
+-    libpng = dlopen("libpng12" SO_EXT,RTLD_LAZY);
++    libpng = dlopen(LIBPNG12_SONAME,RTLD_LAZY);
+ #  endif
+     if ( libpng==NULL ) {
+ 	GDrawIError("%s", dlerror());
+--- fontforge-20040404/configure.in.orig	2004-03-02 20:23:46.000000000 +0100
++++ fontforge-20040404/configure.in	2004-04-11 01:48:13.107623464 +0200
+@@ -73,22 +73,42 @@
+  AC_CHECK_FILE(/usr/local/include/libxml2/libxml,[CFLAGS="$CFLAGS -I/usr/local/include -I/usr/local/include/libxml2/"],
+   AC_DEFINE(_NO_LIBXML))])
+ 
++AC_DEFUN([CHECK_SONAME], [
++	dir=NONE
++	libname=lib[$1]
++	for d in /lib /usr/lib /usr/X11R6/lib /usr/local/lib ; do
++		if test -f $d/${libname}.so ; then
++			dir=$d
++		fi
++	done
++	if test "$dir" = "NONE"; then
++		libsoname=${libname}.so
++	else
++		libsoname="`objdump -p ${dir}/${libname}.so | awk '/SONAME/ { print $[]2 }'`"
++	fi
++	AC_DEFINE_UNQUOTED([AS_TR_CPP([lib$1]_SONAME)], ["$libsoname"], [$1 SONAME])
++])
++
+ dnl Some old versions of lib(un)gif don't work for us, they've got the
+ dnl Function argument in the wrong place. So two checks for gif.
+ 
+ AC_CHECK_LIB(ungif, DGifOpenFileName, [
+ echo -n checking for ExtensionBlock.Function in gif_lib.h...
+-AC_TRY_COMPILE([#include <gif_lib.h>], [ ExtensionBlock foo; foo.Function=3; ], echo " " yes , [echo " " no
++AC_TRY_COMPILE([#include <gif_lib.h>], [ ExtensionBlock foo; foo.Function=3; ],
++	[ echo " " yes
++	CHECK_SONAME(ungif)], [echo " " no
+     ac_cv_lib_ungif_DGifOpenFileName=no
+     AC_DEFINE(_NO_LIBUNGIF)])
+ ] , AC_DEFINE(_NO_LIBUNGIF))
+ 
+ AC_CHECK_LIB(z, deflateEnd, : ,AC_DEFINE(_NO_LIBPNG), -lm) 
+-AC_CHECK_LIB(png, png_create_read_struct, : ,[
+- AC_CHECK_LIB(png12, png_create_read_struct, AC_DEFINE(_LIBPNG12), AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
+-AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, :  ,AC_DEFINE(_NO_LIBJPEG)) 
+-AC_CHECK_LIB(tiff, TIFFOpen, : , AC_DEFINE(_NO_LIBTIFF), -lm )
+-AC_CHECK_LIB(xml2, xmlParseFile, : , AC_DEFINE(_NO_LIBXML))
++AC_CHECK_LIB(png, png_create_read_struct, [CHECK_SONAME(png)], [
++ AC_CHECK_LIB(png12, png_create_read_struct,
++	[AC_DEFINE(_LIBPNG12)
++	 CHECK_SONAME(png12)], AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
++AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, [CHECK_SONAME(jpeg)] ,AC_DEFINE(_NO_LIBJPEG)) 
++AC_CHECK_LIB(tiff, TIFFOpen, [CHECK_SONAME(tiff)] , AC_DEFINE(_NO_LIBTIFF), -lm )
++AC_CHECK_LIB(xml2, xmlParseFile, [CHECK_SONAME(xml2)] , AC_DEFINE(_NO_LIBXML))
+ 
+ AC_CHECK_HEADERS([iconv.h])
+ 
+@@ -108,6 +128,7 @@
+ if test "$gww_hasbytecode" = "yes" ; then
+  AC_CHECK_LIB(pthread, pthread_create, LIBS="$LIBS -lpthread", gww_hasbytecode="no")
+ fi
++CHECK_SONAME(freetype)
+ 
+ if test \( "$gww_hasbytecode" = "yes" \) -a \( "$FreeType2_IncRoot" != "" \); then
+  gww_hasbytecode="no"
+@@ -223,6 +244,9 @@
+  AC_CHECK_LIB(uninameslist, UnicodeNameAnnot, [
+    STATIC_LIBS="$STATIC_LIBS -luninameslist"
+    AC_DEFINE(_STATIC_LIBUNINAMESLIST) ] , AC_DEFINE(_NO_LIBUNINAMESLIST))
++else
++ AC_CHECK_LIB(uninameslist, UnicodeNameAnnot,
++   [CHECK_SONAME(uninameslist)], AC_DEFINE(_NO_LIBUNINAMESLIST))
+ fi
+ if test "$gww_needsstaticimages" = "yes" -a "$gww_regular_link" = "no"; then
+  if test "$gww_needsstatic" = "yes"; then

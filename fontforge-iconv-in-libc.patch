@@ -1,0 +1,11 @@
+--- fontforge-20040418/configure.in.orig	2004-04-25 19:28:49.000000000 +0200
++++ fontforge-20040418/configure.in	2004-04-25 19:33:58.763255336 +0200
+@@ -47,7 +47,7 @@
+ 
+ AC_SEARCH_LIBS(dlopen, dl) dnl some systems have this in libc (Darwin uses dyld)
+ AC_SEARCH_LIBS(inet_aton, resolv) dnl some systems have this in libc
+-AC_SEARCH_LIBS(libiconv, iconv) dnl linux has iconv in libc, mac,solaris have libiconv in libiconv, and a define to map iconv() to libiconv(), so we can't do the obvious check
++AC_CHECK_FUNC([iconv],,[AC_SEARCH_LIBS(libiconv, iconv)]) dnl linux has iconv in libc, mac,solaris have libiconv in libiconv, and a define to map iconv() to libiconv(), so we can't do the obvious check
+ 
+ dnl Is there a better way to add a directory to the include path?
+ 

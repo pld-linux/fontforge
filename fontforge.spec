@@ -1,13 +1,14 @@
 Summary:	An outline font editor
 Summary(pl):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20040404
+Version:	20040418
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://fontforge.sourceforge.net/%{name}_full-%{version}.tgz
-# Source0-md5:	f2fb9c9b6ad494ecce59060c02e80435
+# Source0-md5:	6ff18b8ec8705a6635772f2a70524338
 Patch0:		%{name}-sonames.patch
+Patch1:		%{name}-iconv-in-libc.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf
@@ -43,6 +44,7 @@ FontForge wcze¶niej nazywa³ siê PfaEdit.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}

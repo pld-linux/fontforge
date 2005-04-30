@@ -9,21 +9,20 @@
      if ( libfreetype==NULL )
  return( false );
  
---- fontforge-20040404/fontforge/start.c.orig	2003-07-23 22:39:19.000000000 +0200
-+++ fontforge-20040404/fontforge/start.c	2003-08-08 23:07:07.000000000 +0200
-@@ -68,10 +68,10 @@
- #else
-     const void *libuninames=NULL;
+--- fontforge-20050310/fontforge/start.c.orig	2005-02-18 05:32:53.000000000 +0100
++++ fontforge-20050310/fontforge/start.c	2005-04-30 15:04:22.807032552 +0200
+@@ -100,9 +100,9 @@
+ 
  # ifdef LIBDIR
--    libuninames = dlopen( LIBDIR "/libuninameslist" SO_EXT,RTLD_LAZY);
-+    libuninames = dlopen( LIBDIR "/" LIBUNINAMESLIST_SONAME,RTLD_LAZY);
+ #  if !defined(_NO_SNPRINTF) && !defined(VMS)
+-	snprintf( full, sizeof(full), "%s/%s", LIBDIR, buf );
++	snprintf( full, sizeof(full), "%s/%s%s", LIBDIR, buf, LIBUNINAMESLIST_SOEXT );
+ #  else
+-	sprintf( full, "%s/%s", LIBDIR, buf );
++	sprintf( full, "%s/%s%s", LIBDIR, buf, LIBUNINAMESLIST_SOEXT );
+ #  endif
+ 	libuninames = dlopen( full,RTLD_LAZY);
  # endif
-     if ( libuninames==NULL )
--	libuninames = dlopen( "libuninameslist" SO_EXT,RTLD_LAZY);
-+	libuninames = dlopen( LIBUNINAMESLIST_SONAME,RTLD_LAZY);
-     if ( libuninames!=NULL )
- 	_UnicodeNameAnnot = dlsym(libuninames,"UnicodeNameAnnot");
- #endif
 --- fontforge-20040404/fontforge/svg.c.orig	2003-08-04 04:51:03.000000000 +0200
 +++ fontforge-20040404/fontforge/svg.c	2003-08-08 23:07:28.000000000 +0200
 @@ -519,7 +519,7 @@
@@ -42,11 +41,11 @@
      DL_CONST void *libuninames=NULL;
  # ifdef LIBDIR
 -    libuninames = dlopen( LIBDIR "/libuninameslist" SO_EXT,RTLD_LAZY);
-+    libuninames = dlopen( LIBDIR "/" LIBUNINAMESLIST_SONAME,RTLD_LAZY);
++    libuninames = dlopen( LIBDIR "/libuninameslist" LIBUNINAMESLIST_SOEXT,RTLD_LAZY);
  # endif
      if ( libuninames==NULL )
 -	libuninames = dlopen( "libuninameslist" SO_EXT,RTLD_LAZY);
-+	libuninames = dlopen( LIBUNINAMESLIST_SONAME,RTLD_LAZY);
++	libuninames = dlopen( "libuninameslist" LIBUNINAMESLIST_SOEXT,RTLD_LAZY);
      if ( libuninames!=NULL )
  	_UnicodeNameAnnot = dlsym(libuninames,"UnicodeNameAnnot");
  #endif
@@ -124,16 +123,16 @@
  #  endif
      if ( libpng==NULL ) {
  	GDrawIError("%s", dlerror());
---- fontforge-20040404/configure.in.orig	2004-03-02 20:23:46.000000000 +0100
-+++ fontforge-20040404/configure.in	2004-04-11 01:48:13.107623464 +0200
-@@ -73,22 +73,42 @@
+--- fontforge-20050310/configure.in.orig	2005-02-07 23:35:59.000000000 +0100
++++ fontforge-20050310/configure.in	2005-04-30 16:26:03.430024616 +0200
+@@ -103,12 +103,30 @@
   AC_CHECK_FILE(/usr/local/include/libxml2/libxml,[CFLAGS="$CFLAGS -I/usr/local/include -I/usr/local/include/libxml2/"],
    AC_DEFINE(_NO_LIBXML))])
  
 +AC_DEFUN([CHECK_SONAME], [
 +	dir=NONE
 +	libname=lib[$1]
-+	for d in /lib /usr/lib /usr/X11R6/lib /usr/local/lib ; do
++	for d in /lib64 /lib /usr/lib64 /usr/lib /usr/X11R6/lib64 /usr/X11R6/lib ; do
 +		if test -f $d/${libname}.so ; then
 +			dir=$d
 +		fi
@@ -154,42 +153,46 @@
 -AC_TRY_COMPILE([#include <gif_lib.h>], [ ExtensionBlock foo; foo.Function=3; ], echo " " yes , [echo " " no
 +AC_TRY_COMPILE([#include <gif_lib.h>], [ ExtensionBlock foo; foo.Function=3; ],
 +	[ echo " " yes
-+	CHECK_SONAME(ungif)], [echo " " no
++	CHECK_SONAME(ungif)], , [echo " " no
      ac_cv_lib_ungif_DGifOpenFileName=no
      AC_DEFINE(_NO_LIBUNGIF)])
  ] , AC_DEFINE(_NO_LIBUNGIF))
+@@ -118,14 +136,16 @@
+ dnl zlib.h because we never use it directly, only used inside libpng)
  
  AC_CHECK_LIB(z, deflateEnd, : ,AC_DEFINE(_NO_LIBPNG), -lm) 
 -AC_CHECK_LIB(png, png_create_read_struct, : ,[
 - AC_CHECK_LIB(png12, png_create_read_struct, AC_DEFINE(_LIBPNG12), AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
--AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, :  ,AC_DEFINE(_NO_LIBJPEG)) 
--AC_CHECK_LIB(tiff, TIFFOpen, : , AC_DEFINE(_NO_LIBTIFF), -lm )
--AC_CHECK_LIB(xml2, xmlParseFile, : , AC_DEFINE(_NO_LIBXML))
-+AC_CHECK_LIB(png, png_create_read_struct, [CHECK_SONAME(png)], [
++AC_CHECK_LIB(png, png_create_read_struct, [CHECK_SONAME(png)] ,[
 + AC_CHECK_LIB(png12, png_create_read_struct,
 +	[AC_DEFINE(_LIBPNG12)
 +	 CHECK_SONAME(png12)], AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
+ AC_CHECK_HEADER(png.h, : , AC_DEFINE(_NO_LIBPNG))
+-AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, :  ,AC_DEFINE(_NO_LIBJPEG)) 
 +AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, [CHECK_SONAME(jpeg)] ,AC_DEFINE(_NO_LIBJPEG)) 
+ AC_CHECK_HEADER(jpeglib.h, : , AC_DEFINE(_NO_LIBJPEG))
+-AC_CHECK_LIB(tiff, TIFFOpen, : , AC_DEFINE(_NO_LIBTIFF), -lm )
 +AC_CHECK_LIB(tiff, TIFFOpen, [CHECK_SONAME(tiff)] , AC_DEFINE(_NO_LIBTIFF), -lm )
+ AC_CHECK_HEADER(tiffio.h, : , AC_DEFINE(_NO_LIBTIFF))
+-AC_CHECK_LIB(xml2, xmlParseFile, : , AC_DEFINE(_NO_LIBXML))
 +AC_CHECK_LIB(xml2, xmlParseFile, [CHECK_SONAME(xml2)] , AC_DEFINE(_NO_LIBXML))
  
- AC_CHECK_HEADERS([iconv.h])
- 
-@@ -108,6 +128,7 @@
+ if test "$gww_uselessiconv" = "no" ; then
+  AC_CHECK_HEADERS([iconv.h])
+@@ -147,7 +167,7 @@
  if test "$gww_hasbytecode" = "yes" ; then
   AC_CHECK_LIB(pthread, pthread_create, LIBS="$LIBS -lpthread", gww_hasbytecode="no")
  fi
+-
 +CHECK_SONAME(freetype)
- 
  if test \( "$gww_hasbytecode" = "yes" \) -a \( "$FreeType2_IncRoot" != "" \); then
   gww_hasbytecode="no"
-@@ -223,6 +244,9 @@
-  AC_CHECK_LIB(uninameslist, UnicodeNameAnnot, [
+  AC_ARG_WITH(freetype-src,
+@@ -264,6 +284,7 @@
     STATIC_LIBS="$STATIC_LIBS -luninameslist"
     AC_DEFINE(_STATIC_LIBUNINAMESLIST) ] , AC_DEFINE(_NO_LIBUNINAMESLIST))
-+else
-+ AC_CHECK_LIB(uninameslist, UnicodeNameAnnot,
-+   [CHECK_SONAME(uninameslist)], AC_DEFINE(_NO_LIBUNINAMESLIST))
  fi
++AC_DEFINE_UNQUOTED([LIBUNINAMESLIST_SOEXT],[".so.0"],[libuninameslist ext])
  if test "$gww_needsstaticimages" = "yes" -a "$gww_regular_link" = "no"; then
   if test "$gww_needsstatic" = "yes"; then
+   STATIC_LIBS="$STATIC_LIBS -static"

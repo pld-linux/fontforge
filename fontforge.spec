@@ -1,12 +1,12 @@
 Summary:	An outline font editor
 Summary(pl):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20040418
+Version:	20050310
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://fontforge.sourceforge.net/%{name}_full-%{version}.tgz
-# Source0-md5:	6ff18b8ec8705a6635772f2a70524338
+# Source0-md5:	55787a2c60fd84599d316e0311bcb3ae
 Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
 URL:		http://fontforge.sourceforge.net/
@@ -61,6 +61,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
+# wrong code for Greek
+mv -f $RPM_BUILD_ROOT%{_datadir}/fontforge/pfaedit-{gr,el}.ui
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -76,6 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/fontforge
 %lang(de) %{_datadir}/fontforge/pfaedit-de.ui
 %{_datadir}/fontforge/pfaedit-en.ui
+%lang(el) %{_datadir}/fontforge/pfaedit-el.ui
 %lang(es) %{_datadir}/fontforge/pfaedit-es.ui
 %lang(fr) %{_datadir}/fontforge/pfaedit-fr.ui
 %lang(it) %{_datadir}/fontforge/pfaedit-it.ui

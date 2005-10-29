@@ -34,14 +34,14 @@
      xmltested = true;
      if ( libxml==NULL )
  return( false );
---- pfaedit-030803/gdraw/gchardlg.c.orig	2003-03-11 01:02:55.000000000 +0100
-+++ pfaedit-030803/gdraw/gchardlg.c	2003-08-08 22:55:16.000000000 +0200
+--- fontforge-20051028/gdraw/gchardlg.c.orig	2005-09-30 03:19:49.000000000 +0200
++++ fontforge-20051028/gdraw/gchardlg.c	2005-10-29 21:25:59.401142888 +0200
 @@ -345,10 +345,10 @@
  #else
      DL_CONST void *libuninames=NULL;
  # ifdef LIBDIR
--    libuninames = dlopen( LIBDIR "/libuninameslist" SO_EXT,RTLD_LAZY);
-+    libuninames = dlopen( LIBDIR "/libuninameslist" LIBUNINAMESLIST_SOEXT,RTLD_LAZY);
+-    libuninames = dlopen( LIBDIR "/" "libuninameslist" SO_EXT,RTLD_LAZY);
++    libuninames = dlopen( LIBDIR "/" "libuninameslist" LIBUNINAMESLIST_SOEXT,RTLD_LAZY);
  # endif
      if ( libuninames==NULL )
 -	libuninames = dlopen( "libuninameslist" SO_EXT,RTLD_LAZY);
@@ -123,9 +123,9 @@
  #  endif
      if ( libpng==NULL ) {
  	GDrawIError("%s", dlerror());
---- fontforge-20050310/configure.in.orig	2005-02-07 23:35:59.000000000 +0100
-+++ fontforge-20050310/configure.in	2005-04-30 16:26:03.430024616 +0200
-@@ -103,12 +103,30 @@
+--- fontforge-20051028/configure.in.orig	2005-10-29 05:05:40.000000000 +0200
++++ fontforge-20051028/configure.in	2005-10-29 22:15:47.408896664 +0200
+@@ -148,12 +148,30 @@
   AC_CHECK_FILE(/usr/local/include/libxml2/libxml,[CFLAGS="$CFLAGS -I/usr/local/include -I/usr/local/include/libxml2/"],
    AC_DEFINE(_NO_LIBXML))])
  
@@ -157,16 +157,15 @@
      ac_cv_lib_ungif_DGifOpenFileName=no
      AC_DEFINE(_NO_LIBUNGIF)])
  ] , AC_DEFINE(_NO_LIBUNGIF))
-@@ -118,14 +136,16 @@
+@@ -163,19 +181,20 @@
  dnl zlib.h because we never use it directly, only used inside libpng)
  
  AC_CHECK_LIB(z, deflateEnd, : ,AC_DEFINE(_NO_LIBPNG), -lm) 
 -AC_CHECK_LIB(png, png_create_read_struct, : ,[
 - AC_CHECK_LIB(png12, png_create_read_struct, AC_DEFINE(_LIBPNG12), AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
 +AC_CHECK_LIB(png, png_create_read_struct, [CHECK_SONAME(png)] ,[
-+ AC_CHECK_LIB(png12, png_create_read_struct,
-+	[AC_DEFINE(_LIBPNG12)
-+	 CHECK_SONAME(png12)], AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
++ AC_CHECK_LIB(png12, png_create_read_struct, [AC_DEFINE(_LIBPNG12)
++   CHECK_SONAME(png12)], AC_DEFINE(_NO_LIBPNG), -lz -lm)], -lz -lm)
  AC_CHECK_HEADER(png.h, : , AC_DEFINE(_NO_LIBPNG))
 -AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, :  ,AC_DEFINE(_NO_LIBJPEG)) 
 +AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, [CHECK_SONAME(jpeg)] ,AC_DEFINE(_NO_LIBJPEG)) 
@@ -174,12 +173,17 @@
 -AC_CHECK_LIB(tiff, TIFFOpen, : , AC_DEFINE(_NO_LIBTIFF), -lm )
 +AC_CHECK_LIB(tiff, TIFFOpen, [CHECK_SONAME(tiff)] , AC_DEFINE(_NO_LIBTIFF), -lm )
  AC_CHECK_HEADER(tiffio.h, : , AC_DEFINE(_NO_LIBTIFF))
--AC_CHECK_LIB(xml2, xmlParseFile, : , AC_DEFINE(_NO_LIBXML))
-+AC_CHECK_LIB(xml2, xmlParseFile, [CHECK_SONAME(xml2)] , AC_DEFINE(_NO_LIBXML))
+ case "$host" in
+ *-pc-cygwin*)
+  AC_CHECK_LIB(xml2, xmlParseFile, : , AC_DEFINE(_NO_LIBXML), [-liconv -lz])
+  ;;
+ *)
+- AC_CHECK_LIB(xml2, xmlParseFile, : , AC_DEFINE(_NO_LIBXML))
++ AC_CHECK_LIB(xml2, xmlParseFile, [CHECK_SONAME(xml2)] , AC_DEFINE(_NO_LIBXML))
+  ;;
+ esac
  
- if test "$gww_uselessiconv" = "no" ; then
-  AC_CHECK_HEADERS([iconv.h])
-@@ -147,7 +167,7 @@
+@@ -217,7 +236,7 @@
  if test "$gww_hasbytecode" = "yes" ; then
   AC_CHECK_LIB(pthread, pthread_create, LIBS="$LIBS -lpthread", gww_hasbytecode="no")
  fi
@@ -188,11 +192,11 @@
  if test \( "$gww_hasbytecode" = "yes" \) -a \( "$FreeType2_IncRoot" != "" \); then
   gww_hasbytecode="no"
   AC_ARG_WITH(freetype-src,
-@@ -264,6 +284,7 @@
+@@ -343,6 +362,7 @@
     STATIC_LIBS="$STATIC_LIBS -luninameslist"
     AC_DEFINE(_STATIC_LIBUNINAMESLIST) ] , AC_DEFINE(_NO_LIBUNINAMESLIST))
  fi
 +AC_DEFINE_UNQUOTED([LIBUNINAMESLIST_SOEXT],[".so.0"],[libuninameslist ext])
- if test "$gww_needsstaticimages" = "yes" -a "$gww_regular_link" = "no"; then
-  if test "$gww_needsstatic" = "yes"; then
-   STATIC_LIBS="$STATIC_LIBS -static"
+ 
+ #AC_CHECK_LIB(intl, gettext, STATIC_LIBS="$STATIC_LIBS -lintl" ,HAVE_LIBINTL_H=0 )
+ 

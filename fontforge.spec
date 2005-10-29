@@ -1,12 +1,12 @@
 Summary:	An outline font editor
 Summary(pl):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20050310
+Version:	20051028
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
-Source0:	http://fontforge.sourceforge.net/%{name}_full-%{version}.tgz
-# Source0-md5:	55787a2c60fd84599d316e0311bcb3ae
+Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
+# Source0-md5:	3d385a58cb37c544cfef9a0434072dd6
 Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
 URL:		http://fontforge.sourceforge.net/
@@ -52,6 +52,7 @@ FontForge wcze¶niej nazywa³ siê PfaEdit.
 %{__autoconf}
 %configure \
 	--with-freetype-bytecode \
+	--with-multilayer \
 	--without-freetype-src
 
 %{__make}
@@ -72,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS LICENSE README
+%doc AUTHORS LICENSE
 %attr(755,root,root) %{_bindir}/fontforge
 %attr(755,root,root) %{_bindir}/sfddiff
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
@@ -85,4 +86,6 @@ rm -rf $RPM_BUILD_ROOT
 %lang(it) %{_datadir}/fontforge/pfaedit-it.ui
 %lang(ja) %{_datadir}/fontforge/pfaedit-ja.ui
 %lang(ru) %{_datadir}/fontforge/pfaedit-ru.ui
+# which zh?
+%lang(zh) %{_datadir}/fontforge/pfaedit-zh.ui
 %{_mandir}/man1/*

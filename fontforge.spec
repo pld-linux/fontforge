@@ -1,26 +1,31 @@
 Summary:	An outline font editor
 Summary(pl):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20051028
+Version:	20051205
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
-# Source0-md5:	3d385a58cb37c544cfef9a0434072dd6
+# Source0-md5:	d4b766cee54441072d4a2b9db99a2ddf
 Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
+Patch2:		%{name}-sfddiff-build.patch
+Patch3:		%{name}-po.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 # needed at build time to not disable their support and for detecting SONAME
 BuildRequires:	freetype-devel >= 2.0.0
+BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libungif-devel
 BuildRequires:	libuninameslist-devel
+BuildRequires:	libxml2-devel
+Requires:	iconv
 Obsoletes:	pfaedit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -45,6 +50,8 @@ FontForge wcze¶niej nazywa³ siê PfaEdit.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -62,8 +69,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
-# wrong code for Greek
-mv -f $RPM_BUILD_ROOT%{_datadir}/fontforge/pfaedit-{gr,el}.ui
+%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -71,21 +77,10 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS LICENSE
 %attr(755,root,root) %{_bindir}/fontforge
 %attr(755,root,root) %{_bindir}/sfddiff
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%dir %{_datadir}/fontforge
-%lang(de) %{_datadir}/fontforge/pfaedit-de.ui
-%{_datadir}/fontforge/pfaedit-en.ui
-%lang(el) %{_datadir}/fontforge/pfaedit-el.ui
-%lang(es) %{_datadir}/fontforge/pfaedit-es.ui
-%lang(fr) %{_datadir}/fontforge/pfaedit-fr.ui
-%lang(it) %{_datadir}/fontforge/pfaedit-it.ui
-%lang(ja) %{_datadir}/fontforge/pfaedit-ja.ui
-%lang(ru) %{_datadir}/fontforge/pfaedit-ru.ui
-# which zh?
-%lang(zh) %{_datadir}/fontforge/pfaedit-zh.ui
 %{_mandir}/man1/*

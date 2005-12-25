@@ -1,0 +1,20 @@
+--- fontforge-20051205/po/Makefile.in.orig	2005-10-27 16:17:33.000000000 +0200
++++ fontforge-20051205/po/Makefile.in	2005-12-25 13:36:07.000000000 +0100
+@@ -14,12 +14,12 @@
+ install:
+ #There must be a better way to do this...
+ 	mkdir -p $(localedir)/es/LC_MESSAGES
+-	cp es.mo $(localedir)/es/LC_MESSAGES/FontForge.mo
++	cp es.mo $(localedir)/es/LC_MESSAGES/fontforge.mo
+ 	mkdir -p $(localedir)/fr/LC_MESSAGES
+-	cp fr.mo $(localedir)/fr/LC_MESSAGES/FontForge.mo
++	cp fr.mo $(localedir)/fr/LC_MESSAGES/fontforge.mo
+ 	mkdir -p $(localedir)/it/LC_MESSAGES
+-	cp it.mo $(localedir)/it/LC_MESSAGES/FontForge.mo
++	cp it.mo $(localedir)/it/LC_MESSAGES/fontforge.mo
+ 	mkdir -p $(localedir)/ru/LC_MESSAGES
+-	cp ru.mo $(localedir)/ru/LC_MESSAGES/FontForge.mo
++	cp ru.mo $(localedir)/ru/LC_MESSAGES/fontforge.mo
+ 	mkdir -p $(localedir)/ja/LC_MESSAGES
+-	cp ja.mo $(localedir)/ja/LC_MESSAGES/FontForge.mo
++	cp ja.mo $(localedir)/ja/LC_MESSAGES/fontforge.mo

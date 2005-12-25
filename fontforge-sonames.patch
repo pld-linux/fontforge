@@ -23,13 +23,13 @@
  #  endif
  	libuninames = dlopen( full,RTLD_LAZY);
  # endif
---- fontforge-20040404/fontforge/svg.c.orig	2003-08-04 04:51:03.000000000 +0200
-+++ fontforge-20040404/fontforge/svg.c	2003-08-08 23:07:28.000000000 +0200
-@@ -519,7 +519,7 @@
+--- fontforge-20051205/fontforge/svg.c.orig	2005-10-18 06:44:21.000000000 +0200
++++ fontforge-20051205/fontforge/svg.c	2005-12-25 01:55:05.000000000 +0100
+@@ -773,7 +773,7 @@
      if ( xmltested )
  return( libxml!=NULL );
  
--    libxml = dlopen("libxml2" SO_EXT,RTLD_LAZY);
+-    libxml = dlopen( "libxml2" SO_EXT,RTLD_LAZY);
 +    libxml = dlopen(LIBXML2_SONAME,RTLD_LAZY);
      xmltested = true;
      if ( libxml==NULL )

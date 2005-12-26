@@ -10,7 +10,6 @@ Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
 Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
 Patch2:		%{name}-sfddiff-build.patch
-Patch3:		%{name}-po.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf
@@ -51,7 +50,6 @@ FontForge wcze¶niej nazywa³ siê PfaEdit.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -69,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
-%find_lang %{name}
+%find_lang FontForge
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -77,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files -f %{name}.lang
+%files -f FontForge.lang
 %defattr(644,root,root,755)
 %doc AUTHORS LICENSE
 %attr(755,root,root) %{_bindir}/fontforge

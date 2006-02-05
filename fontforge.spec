@@ -1,12 +1,12 @@
 Summary:	An outline font editor
 Summary(pl):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20051205
+Version:	20060125
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
-# Source0-md5:	d4b766cee54441072d4a2b9db99a2ddf
+# Source0-md5:	831ac5225b1a9b00b0b7bcf622c62fee
 Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
 Patch2:		%{name}-sfddiff-build.patch
@@ -68,6 +68,8 @@ rm -rf $RPM_BUILD_ROOT
 %makeinstall
 
 %find_lang FontForge
+
+rm -rf $RPM_BUILD_ROOT%{_libdir}/{*.la,pkgconfig}
 
 %clean
 rm -rf $RPM_BUILD_ROOT

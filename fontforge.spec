@@ -11,7 +11,6 @@ Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
 Patch2:		%{name}-sfddiff-build.patch
 URL:		http://fontforge.sourceforge.net/
-BuildRequires:	XFree86-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 # needed at build time to not disable their support and for detecting SONAME
@@ -24,6 +23,17 @@ BuildRequires:	libtool
 BuildRequires:	libungif-devel
 BuildRequires:	libuninameslist-devel
 BuildRequires:	libxml2-devel
+BuildRequires:	xorg-lib-libICE-devel
+BuildRequires:	xorg-lib-libSM-devel
+BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xorg-lib-libXau-devel
+BuildRequires:	xorg-lib-libXdmcp-devel
+BuildRequires:	xorg-lib-libXext-devel
+BuildRequires:	xorg-lib-libXi-devel
+BuildRequires:	xorg-lib-libXt-devel
+BuildRequires:	xorg-lib-libxkbfile-devel
+BuildRequires:	xorg-lib-libxkbui-devel
+
 Requires:	iconv
 Obsoletes:	pfaedit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)

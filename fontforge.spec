@@ -16,11 +16,11 @@ BuildRequires:	automake
 # needed at build time to not disable their support and for detecting SONAME
 BuildRequires:	freetype-devel >= 2.0.0
 BuildRequires:	gettext-devel
+BuildRequires:	giflib-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
-BuildRequires:	libungif-devel
 BuildRequires:	libuninameslist-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	xorg-lib-libICE-devel

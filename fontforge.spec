@@ -1,15 +1,15 @@
 Summary:	An outline font editor
 Summary(pl):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20060125
+Version:	20060822
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
-# Source0-md5:	831ac5225b1a9b00b0b7bcf622c62fee
+# Source0-md5:	872a8013be82e322677f7c254101544d
 Patch0:		%{name}-sonames.patch
 Patch1:		%{name}-iconv-in-libc.patch
-Patch2:		%{name}-sfddiff-build.patch
+Patch2:		%{name}-link.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -23,17 +23,8 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libuninameslist-devel
 BuildRequires:	libxml2-devel
-BuildRequires:	xorg-lib-libICE-devel
-BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libX11-devel
-BuildRequires:	xorg-lib-libXau-devel
-BuildRequires:	xorg-lib-libXdmcp-devel
-BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXi-devel
-BuildRequires:	xorg-lib-libXt-devel
-BuildRequires:	xorg-lib-libxkbfile-devel
-BuildRequires:	xorg-lib-libxkbui-devel
-
 Requires:	iconv
 Obsoletes:	pfaedit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -77,6 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
+mv -f $RPM_BUILD_ROOT%{_datadir}/locale/{gr,el}
 %find_lang FontForge
 
 rm -rf $RPM_BUILD_ROOT%{_libdir}/{*.la,pkgconfig}

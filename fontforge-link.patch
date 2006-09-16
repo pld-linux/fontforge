@@ -1,0 +1,73 @@
+--- fontforge-20060822/fontforge/Makefile.dynamic.in.orig	2006-08-07 04:09:46.000000000 +0200
++++ fontforge-20060822/fontforge/Makefile.dynamic.in	2006-09-16 15:19:44.300186750 +0200
+@@ -13,6 +13,7 @@
+ LIBTOOL = @LIBTOOL@
+ CC = @CC@
+ 
++LDFLAGS = @LDFLAGS@
+ X_CFLAGS = @X_CFLAGS@
+ X_LIBS = @X_LIBS@
+ X_11LIB = @X_11LIB@
+@@ -51,14 +52,14 @@
+ CFLAGS = @CFLAGS@ $(_CFLAGS)
+ 
+ #I used to include -L/usr/lib explicitly after static_libs. Not sure why. Should be implied & breaks 64bit compiles
+-LIBS = -rpath $(libdir) $(X_LIBS) ../libgdraw.la ../libgunicode.la \
+-    $(X_PRE_LIBS) $(X_11LIB) $(X_EXTRA_LIBS) @LIBS@ $(STATIC_LIBS) -lm
++LIBS = -rpath $(libdir) $(STATIC_LIBS) $(X_LIBS) ../libgdraw.la ../libgunicode.la \
++    $(X_11LIB) $(X_EXTRA_LIBS) @LIBS@ -lm
+ DLIBS = -rpath $(libdir) ../libgunicode.la @LIBS@ $(STATIC_LIBS) -lm
+ 
+ all: fontforge sfddiff
+ 
+ fontforge: main.o $(fontforge_LIBOBJECTS)
+-	$(LIBTOOL) --mode=link $(CC) -export-dynamic -o fontforge main.o $(fontforge_LIBOBJECTS) $(LIBS)
++	$(LIBTOOL) --mode=link $(CC) -export-dynamic -o fontforge main.o $(fontforge_LIBOBJECTS) $(LDFLAGS) $(LIBS)
+ 
+ sfddiff: sfddiff.pe
+ 	echo "#!$(bindir)/fontforge" >sfddiff
+--- fontforge-20060822/gdraw/Makefile.dynamic.in.orig	2006-08-22 08:14:00.000000000 +0200
++++ fontforge-20060822/gdraw/Makefile.dynamic.in	2006-09-16 15:12:29.164992500 +0200
+@@ -41,7 +41,7 @@
+ 
+ ../libgdraw.la: $(libgdraw_OBJECTS)
+ 	$(LIBTOOL) --mode=link $(CC) $(CFLAGS) @LDFLAGS@ -o ../libgdraw.la $(libgdraw_OBJECTS) \
+-	    $(STATIC_LIBS) $(X_LIBS) $(X_PRE_LIBS) $(X_11LIB) $(X_EXTRA_LIBS)  \
++	    $(STATIC_LIBS) ../libgunicode.la $(X_LIBS) $(X_11LIB) $(X_EXTRA_LIBS) -lm \
+ 	    -rpath $(libdir) -version-info $(GD_VERSION):$(GD_REVISION):$(GD_AGE)
+ 
+ %.lo: %.c
+--- fontforge-20060822/configure.in.orig	2006-09-16 14:04:37.782547000 +0200
++++ fontforge-20060822/configure.in	2006-09-16 15:17:21.123238750 +0200
+@@ -28,8 +28,6 @@
+ 
+  ])
+ 
+-LDFLAGS="$LDFLAGS -L/usr/local/lib"
+-
+ case "$host" in
+ *-apple-darwin*)
+  gww_ismac="yes"
+@@ -334,8 +332,8 @@
+  dnl AC_CHECK_HEADER("X11/extensions/XI.h", : ,AC_DEFINE(_NO_XINPUT),)
+  dnl /usr/share/doc/XFree86-doc-4.2.0/Xi/lib.PS
+ 
+- AC_CHECK_LIB(Xi, XOpenDevice, X_11LIB="-lXi -lX11" ,AC_DEFINE(_NO_XINPUT), $X_LIBS $X_PRE_LIBS $X_EXTRA_LIBS -lX11 ) 
+- AC_CHECK_LIB(xkbui, XkbQueryExtension, X_11LIB="$X_11LIB -lxkbui" ,AC_DEFINE(_NO_XKB), $X_LIBS $X_PRE_LIBS $X_EXTRA_LIBS -lX11 -lm ) 
++ AC_CHECK_LIB(Xi, XOpenDevice, X_11LIB="-lXi -lX11" ,AC_DEFINE(_NO_XINPUT), $X_LIBS $X_EXTRA_LIBS -lX11 ) 
++ AC_CHECK_LIB(X11, XkbQueryExtension, [:] ,AC_DEFINE(_NO_XKB), $X_LIBS $X_EXTRA_LIBS -lm ) 
+ fi
+ 
+ AC_C_LONG_DOUBLE
+--- fontforge-20060822/Makefile.dynamic.in.orig	2006-07-14 22:20:20.000000000 +0200
++++ fontforge-20060822/Makefile.dynamic.in	2006-09-16 15:52:43.479877750 +0200
+@@ -50,8 +50,8 @@
+ # You may need to be root to do the install
+ 	mkdir -p $(libdir)
+ 	#-rm $(libdir)/libgdraw.so* $(libdir)/libgunicode.so.*
+-	$(LIBTOOL) --mode=install $(INSTALL) -c libgdraw.la $(libdir)/libgdraw.la
+ 	$(LIBTOOL) --mode=install $(INSTALL) -c libgunicode.la $(libdir)/libgunicode.la
++	$(LIBTOOL) --mode=install $(INSTALL) -c libgdraw.la $(libdir)/libgdraw.la
+ 	#cp .libs/*.so.*.* $(libdir)
+ 	$(LIBTOOL) --mode=finish $(libdir)
+ 	mkdir -p $(libdir)/pkgconfig

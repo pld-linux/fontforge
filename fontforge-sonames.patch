@@ -123,9 +123,9 @@
  #  endif
      if ( libpng==NULL ) {
  	GDrawIError("%s", dlerror());
---- fontforge-20051028/configure.in.orig	2005-10-29 05:05:40.000000000 +0200
-+++ fontforge-20051028/configure.in	2005-10-29 22:15:47.408896664 +0200
-@@ -148,12 +148,30 @@
+--- fontforge-20060822/configure.in.orig	2006-08-18 21:33:41.000000000 +0200
++++ fontforge-20060822/configure.in	2006-09-16 13:59:22.074816500 +0200
+@@ -165,13 +165,31 @@
   AC_CHECK_FILE(/usr/local/include/libxml2/libxml,[CFLAGS="$CFLAGS -I/usr/local/include -I/usr/local/include/libxml2/"],
    AC_DEFINE(_NO_LIBXML))])
  
@@ -146,9 +146,10 @@
 +])
 +
  dnl Some old versions of lib(un)gif don't work for us, they've got the
- dnl Function argument in the wrong place. So two checks for gif.
+ dnl Function argument in the wrong place. So check the header files.
+ dnl check for both libgif and libungif, I think they use the same args.
  
- AC_CHECK_LIB(ungif, DGifOpenFileName, [
+ AC_CHECK_LIB(gif, DGifOpenFileName, [
  echo -n checking for ExtensionBlock.Function in gif_lib.h...
 -AC_TRY_COMPILE([#include <gif_lib.h>], [ ExtensionBlock foo; foo.Function=3; ], echo " " yes , [echo " " no
 +AC_TRY_COMPILE([#include <gif_lib.h>], [ ExtensionBlock foo; foo.Function=3; ],
@@ -156,8 +157,8 @@
 +	CHECK_SONAME(ungif)], , [echo " " no
      ac_cv_lib_ungif_DGifOpenFileName=no
      AC_DEFINE(_NO_LIBUNGIF)])
- ] , AC_DEFINE(_NO_LIBUNGIF))
-@@ -163,19 +181,20 @@
+ ] , [
+@@ -187,19 +205,20 @@
  dnl zlib.h because we never use it directly, only used inside libpng)
  
  AC_CHECK_LIB(z, deflateEnd, : ,AC_DEFINE(_NO_LIBPNG), -lm) 
@@ -183,7 +184,7 @@
   ;;
  esac
  
-@@ -217,7 +236,7 @@
+@@ -247,7 +266,7 @@
  if test "$gww_hasbytecode" = "yes" ; then
   AC_CHECK_LIB(pthread, pthread_create, LIBS="$LIBS -lpthread", gww_hasbytecode="no")
  fi
@@ -192,11 +193,11 @@
  if test \( "$gww_hasbytecode" = "yes" \) -a \( "$FreeType2_IncRoot" != "" \); then
   gww_hasbytecode="no"
   AC_ARG_WITH(freetype-src,
-@@ -343,6 +362,7 @@
+@@ -374,6 +393,7 @@
     STATIC_LIBS="$STATIC_LIBS -luninameslist"
     AC_DEFINE(_STATIC_LIBUNINAMESLIST) ] , AC_DEFINE(_NO_LIBUNINAMESLIST))
  fi
 +AC_DEFINE_UNQUOTED([LIBUNINAMESLIST_SOEXT],[".so.0"],[libuninameslist ext])
  
- #AC_CHECK_LIB(intl, gettext, STATIC_LIBS="$STATIC_LIBS -lintl" ,HAVE_LIBINTL_H=0 )
- 
+ dnl used to check for gettext here, but we require a version with b_t_c
+ dnl and not all libintls have that. So check for it instead.

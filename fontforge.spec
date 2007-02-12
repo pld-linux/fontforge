@@ -1,5 +1,5 @@
 Summary:	An outline font editor
-Summary(pl):	Edytor fontów rysowanych
+Summary(pl.UTF-8):   Edytor fontÃ³w rysowanych
 Name:		fontforge
 Version:	20060822
 Release:	1
@@ -37,14 +37,14 @@ some Type 0s), TrueType, OpenType (Type2) and CID-keyed fonts.
 
 FontForge used to be called PfaEdit.
 
-%description -l pl
-FontForge pozwala na edycjê fontów rysowanych i bitmapowych. Mo¿na
-tworzyæ nowe lub modyfikowaæ istniej±ce. Jest to tak¿e konwerter
-miêdzy formatami fontów - potrafi obs³ugiwaæ fonty postscriptowe
-(ASCII i binarne Type 1, czê¶æ Type 3, czê¶æ Type 0), TrueType,
+%description -l pl.UTF-8
+FontForge pozwala na edycjÄ™ fontÃ³w rysowanych i bitmapowych. MoÅ¼na
+tworzyÄ‡ nowe lub modyfikowaÄ‡ istniejÄ…ce. Jest to takÅ¼e konwerter
+miÄ™dzy formatami fontÃ³w - potrafi obsÅ‚ugiwaÄ‡ fonty postscriptowe
+(ASCII i binarne Type 1, czÄ™Å›Ä‡ Type 3, czÄ™Å›Ä‡ Type 0), TrueType,
 OpenType (Type2) i fonty z kluczami CID.
 
-FontForge wcze¶niej nazywa³ siê PfaEdit.
+FontForge wczeÅ›niej nazywaÅ‚ siÄ™ PfaEdit.
 
 %prep
 %setup -q

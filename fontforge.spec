@@ -1,5 +1,5 @@
 Summary:	An outline font editor
-Summary(pl.UTF-8):   Edytor fontów rysowanych
+Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
 Version:	20060822
 Release:	1

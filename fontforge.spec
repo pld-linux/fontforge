@@ -1,15 +1,13 @@
 Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20060822
+Version:	20090923
 Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
-# Source0-md5:	872a8013be82e322677f7c254101544d
+# Source0-md5:	ea9d8dc38de79235fbe6add725b38ffe
 Patch0:		%{name}-sonames.patch
-Patch1:		%{name}-iconv-in-libc.patch
-Patch2:		%{name}-link.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -48,9 +46,9 @@ FontForge wcześniej nazywał się PfaEdit.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+# hardcoded in code is +- same as hardcoded at compile time
+#%patch0 -p1
+#%patch2 -p1
 
 %build
 %{__libtoolize}
@@ -68,7 +66,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
-mv -f $RPM_BUILD_ROOT%{_datadir}/locale/{gr,el}
 %find_lang FontForge
 
 rm -rf $RPM_BUILD_ROOT%{_libdir}/{*.la,pkgconfig}
@@ -83,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS LICENSE
 %attr(755,root,root) %{_bindir}/fontforge
+%attr(755,root,root) %{_bindir}/fontimage
+%attr(755,root,root) %{_bindir}/fontlint
 %attr(755,root,root) %{_bindir}/sfddiff
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/lib*.so.*
+%{_datadir}/fontforge
 %{_mandir}/man1/*

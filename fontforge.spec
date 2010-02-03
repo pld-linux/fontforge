@@ -22,6 +22,8 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libuninameslist-devel
 BuildRequires:	libxml2-devel
+BuildRequires:	python-devel
+BuildRequires:	python-modules
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXi-devel
 Requires:	iconv

@@ -2,7 +2,7 @@ Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
 Version:	20090923
-Release:	3
+Release:	4
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
@@ -72,7 +72,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
-rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/mal
+# Malayalam is ml
+mv $RPM_BUILD_ROOT%{_datadir}/locale/m{a,}l
 
 %find_lang FontForge
 

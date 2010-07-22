@@ -8,6 +8,7 @@ Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
 # Source0-md5:	5f3d20d645ec1aa2b7b4876386df8717
 Patch0:		%{name}-sonames.patch
+Patch1:		%{name}-python2.7.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -50,6 +51,7 @@ FontForge wcześniej nazywał się PfaEdit.
 %setup -q
 # hardcoded in code is +- same as hardcoded at compile time
 #%patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}

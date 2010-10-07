@@ -1,0 +1,58 @@
+--- fontforge-20100501/configure.in.orig	2009-12-27 00:18:48.000000000 +0100
++++ fontforge-20100501/configure.in	2010-10-07 09:20:42.775738529 +0200
+@@ -21,6 +21,8 @@
+ AC_SUBST(LINK_WITH_GDRAW)
+ X_11LIB=-lX11
+ GDRAW_LIB=libgdraw
++dnl this is abused later: originally contains -lSM -lICE, which are not needed
++X_PRE_LIBS=
+ exeOBJECTS=fontforge_UIOBJECTS
+ LINK_WITH_GDRAW=../libgdraw.la
+ if test "$no_x" = "yes"; then
+@@ -61,7 +63,6 @@
+ oldCPPFLAGS="$CPPFLAGS"
+ gww_extraincludes=""
+ oldLDFLAGS="$LDFLAGS"
+-LDFLAGS="$LDFLAGS -L/usr/local/lib"
+ 
+ case "$host" in
+ *-apple-darwin*)
+@@ -285,12 +286,17 @@
+       fi
+       PyLib=`$python_prog -c "import distutils.sysconfig ; print(distutils.sysconfig.get_config_var('LIBPL') + '/' + distutils.sysconfig.get_config_var('LDLIBRARY'))"`
+       if test "$py_lib" != "" ; then
+-        LIBS="$LIBS $py_lib"
++        LIBPYTHON="$py_lib"
+       elif test "$PyLib" != "" -a -e "$PyLib" ; then
+-        LIBS="$LIBS $PyLib"
++        LIBPYTHON="$PyLib"
+       else
++	save_LIBS="$LIBS"
++	LIBS=
+ 	AC_SEARCH_LIBS(Py_Main, $PyName python, : , python="no")
++	LIBPYTHON="$LIBS"
++	LIBS="$save_LIBS"
+       fi
++      AC_SUBST([LIBPYTHON])
+     fi
+   else
+     python="no"
+--- fontforge-20100501/fontforge/Makefile.dynamic.in.orig	2010-10-07 09:25:42.675742720 +0200
++++ fontforge-20100501/fontforge/Makefile.dynamic.in	2010-10-07 20:30:48.611745234 +0200
+@@ -20,6 +20,7 @@
+ X_EXTRA_LIBS = @X_EXTRA_LIBS@
+ X_PRE_LIBS = @X_PRE_LIBS@
+ STATIC_LIBS = @STATIC_LIBS@
++LIBPYTHON = @LIBPYTHON@
+ 
+ FF_VERSION=1
+ FF_REVISION=0
+@@ -71,7 +72,7 @@
+     ../libgunicode.la \
+     $(X_PRE_LIBS) $(X_11LIB) $(X_EXTRA_LIBS) @LIBS@ $(STATIC_LIBS) -lm
+ LIBLIBS = -rpath $(libdir) ../libgutils.la ../libgunicode.la \
+-    @LIBS@ $(STATIC_LIBS) -lm
++    @LIBS@ $(STATIC_LIBS) $(LIBPYTHON) -lm
+ DLIBS = -rpath $(libdir)  ../libfontforge.la ../libgutils.la ../libgunicode.la @LIBS@ $(STATIC_LIBS) -lm
+ 
+ all: @FINAL_TARGET@ @MACAPP@ sfddiff fontimage fontlint

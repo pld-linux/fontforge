@@ -19,6 +19,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	giflib-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
+BuildRequires:	libspiro-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libuninameslist-devel

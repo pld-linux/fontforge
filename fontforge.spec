@@ -1,14 +1,13 @@
 Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20100501
-Release:	2
+Version:	20110222
+Release:	1
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
-# Source0-md5:	5f3d20d645ec1aa2b7b4876386df8717
+# Source0-md5:	5be4dda345b5d73a27cc399df96e463a
 Patch0:		%{name}-link.patch
-Patch1:		%{name}-python2.7.patch
 #Patch0:		%{name}-sonames.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	autoconf
@@ -66,7 +65,6 @@ Pliki nagłówkowe bibliotek FontForge.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -87,9 +85,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-# Malayalam is ml
-mv $RPM_BUILD_ROOT%{_datadir}/locale/{mal,ml}
 
 %find_lang FontForge
 

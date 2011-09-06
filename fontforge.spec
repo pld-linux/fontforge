@@ -2,13 +2,15 @@ Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
 Version:	20110222
-Release:	1
+Release:	2
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://dl.sourceforge.net/fontforge/%{name}_full-%{version}.tar.bz2
 # Source0-md5:	5be4dda345b5d73a27cc399df96e463a
 Patch0:		%{name}-link.patch
-#Patch0:		%{name}-sonames.patch
+Patch1:         fontforge-20090224-pythondl.patch
+Patch2:         fontforge-20100501-select-points-crash.patch
+Patch3:         fontforge-20110222-multilib.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -65,6 +67,9 @@ Pliki nagłówkowe bibliotek FontForge.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p0
 
 %build
 %{__libtoolize}
@@ -72,11 +77,19 @@ Pliki nagłówkowe bibliotek FontForge.
 %{__autoconf}
 %configure \
 	--enable-type3 \
+	--enable-multilayer \
 	--enable-devicetables \
 	--enable-longdouble \
+	--enable-gb12345 \
+	--enable-pasteafter \
+	--enable-tilepath \
+	--enable-pyextension \
 	--with-freetype-bytecode \
 	--with-regular-link \
-	--without-freetype-src
+	--without-freetype-src \
+	--with-pango \
+	--with-cairo \
+	--with-x
 
 %{__make}
 

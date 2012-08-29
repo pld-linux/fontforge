@@ -56,3 +56,15 @@
  DLIBS = -rpath $(libdir)  ../libfontforge.la ../libgutils.la ../libgunicode.la @LIBS@ $(STATIC_LIBS) -lm
  
  all: @FINAL_TARGET@ @MACAPP@ sfddiff fontimage fontlint
+--- fontforge-20110222/configure.in~	2012-02-11 18:18:03.000000000 +0100
++++ fontforge-20110222/configure.in	2012-02-11 18:25:25.604323722 +0100
+@@ -721,6 +721,9 @@
+  if test "$ac_cv_lib_png14_png_create_read_struct" = "yes"; then
+   STATIC_LIBS="$STATIC_LIBS -lpng14 -lz"
+  fi
++ if test "$ac_cv_lib_png15_png_create_read_struct" = "yes"; then
++  STATIC_LIBS="$STATIC_LIBS -lpng15 -lz"
++ fi
+  if test "$ac_cv_lib_tiff_TIFFOpen" = "yes"; then
+   STATIC_LIBS="$STATIC_LIBS -ltiff"
+  fi

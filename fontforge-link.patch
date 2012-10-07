@@ -68,3 +68,14 @@
   if test "$ac_cv_lib_tiff_TIFFOpen" = "yes"; then
    STATIC_LIBS="$STATIC_LIBS -ltiff"
   fi
+--- fontforge-20120731-b/configure.in.orig	2012-10-07 17:41:49.342851423 +0200
++++ fontforge-20120731-b/configure.in	2012-10-07 18:59:16.455989734 +0200
+@@ -38,7 +38,7 @@
+  dnl /usr/share/doc/XFree86-doc-4.2.0/Xi/lib.PS
+ 
+  AC_CHECK_LIB(Xi, XOpenDevice, X_11LIB="-lXi -lX11" ,AC_DEFINE(_NO_XINPUT), $X_LIBS $X_PRE_LIBS $X_EXTRA_LIBS -lX11 ) 
+- AC_CHECK_LIB(xkbui, XkbQueryExtension, X_11LIB="$X_11LIB -lxkbui" ,AC_DEFINE(_NO_XKB), $X_LIBS $X_PRE_LIBS $X_EXTRA_LIBS -lX11 -lm ) 
++ AC_CHECK_LIB(X11, XkbQueryExtension, X_11LIB="$X_11LIB -lX11" ,AC_DEFINE(_NO_XKB), $X_LIBS $X_PRE_LIBS $X_EXTRA_LIBS -lX11 -lm ) 
+ fi
+ 
+ gww_define_caps_for_alt="dontknow"

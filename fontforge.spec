@@ -12,7 +12,8 @@ Patch1:		%{name}-20090224-pythondl.patch
 URL:		http://fontforge.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	cairo-devel
+BuildRequires:	cairo-devel >= 1.2
+BuildRequires:	fontconfig-devel
 BuildRequires:	freetype-devel >= 2.0.0
 BuildRequires:	gettext-devel
 BuildRequires:	giflib-devel
@@ -29,6 +30,8 @@ BuildRequires:	python-devel >= 2.3
 BuildRequires:	python-modules >= 2.3
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXi-devel
+BuildRequires:	zlib-devel
+Requires:	cairo >= 1.2
 Requires:	iconv
 Obsoletes:	pfaedit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -55,6 +58,20 @@ Summary:	Header files for FontForge libraries
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek FontForge
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	cairo-devel >= 1.2
+Requires:	fontconfig-devel
+Requires:	freetype-devel >= 2.0.0
+Requires:	giflib-devel
+Requires:	libjpeg-devel
+Requires:	libpng-devel
+Requires:	libspiro-devel
+Requires:	libtiff-devel
+Requires:	libuninameslist-devel
+Requires:	libxml2-devel
+Requires:	pango-devel
+Requires:	xorg-lib-libX11-devel
+Requires:	xorg-lib-libXi-devel
+Requires:	zlib-devel
 
 %description devel
 Header files for FontForge libraries.

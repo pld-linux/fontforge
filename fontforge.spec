@@ -15,7 +15,7 @@ BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.2
 BuildRequires:	fontconfig-devel
 BuildRequires:	freetype-devel >= 2.0.0
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	giflib-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel

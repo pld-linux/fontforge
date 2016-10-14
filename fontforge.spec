@@ -2,7 +2,7 @@ Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
 Version:	20120731
-Release:	5
+Release:	6
 License:	BSD
 Group:		X11/Applications/Publishing
 Source0:	http://downloads.sourceforge.net/fontforge/%{name}_full-%{version}-b.tar.bz2
@@ -114,6 +114,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libfontforge.la
+
 %find_lang FontForge
 
 %clean
@@ -152,7 +154,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libgioftp.so
 %attr(755,root,root) %{_libdir}/libgunicode.so
 %attr(755,root,root) %{_libdir}/libgutils.so
-%{_libdir}/libfontforge.la
 %{_libdir}/libgdraw.la
 %{_libdir}/libgioftp.la
 %{_libdir}/libgunicode.la

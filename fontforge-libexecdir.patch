@@ -1,0 +1,22 @@
+--- fontforge-2.0.20170731/mk/layout.am.orig	2017-07-22 07:00:39.158252006 +0200
++++ fontforge-2.0.20170731/mk/layout.am	2018-06-23 17:06:59.559868658 +0200
+@@ -45,7 +45,7 @@
+ # Where to put binaries which are really only interesting to fontforge itself.
+ # For example, processes that are created to help with real time collaboration
+ # but which are really not so interesting for the user to ever directly create.
+-internal_bindir = ${libexecdir}/bin/FontForgeInternal
++internal_bindir = ${libexecdir}/FontForgeInternal
+ 
+ # Where the FontForge help system goes.
+ HTDOCS_SUBDIR =
+--- fontforge-2.0.20170731/fontforgeexe/collabclientui.c.orig	2017-07-22 07:00:39.058202006 +0200
++++ fontforge-2.0.20170731/fontforgeexe/collabclientui.c	2018-06-23 17:07:29.866534978 +0200
+@@ -921,7 +921,7 @@
+ 	
+ #else	
+ 	sprintf(command_line,
+-		"%s/bin/FontForgeInternal/fontforge-internal-collab-server %d",
++		"%s/FontForgeInternal/fontforge-internal-collab-server %d",
+ 		getLibexecDir_NonWindows(), cc->port );
+ #endif	
+ 	printf("command_line:%s\n", command_line );

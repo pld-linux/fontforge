@@ -1,39 +1,60 @@
+#
+# Conditional build:
+%bcond_with	python		# Python scripting
+%bcond_without	static_libs	# static libraries
+
 Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20120731
-Release:	6
-License:	BSD
+Version:	20170731
+Release:	1
+License:	GPL v3+ with BSD parts
 Group:		X11/Applications/Publishing
-Source0:	http://downloads.sourceforge.net/fontforge/%{name}_full-%{version}-b.tar.bz2
-# Source0-md5:	a8a90473a97da87e45f66d11007b6e7c
+#Source0Download: https://github.com/fontforge/fontforge/releases
+Source0:	https://github.com/fontforge/fontforge/releases/download/%{version}/%{name}-dist-%{version}.tar.xz
+# Source0-md5:	8a717035915ab4cd78b89b0942dfa1fc
 Patch0:		%{name}-link.patch
-Patch1:		%{name}-20090224-pythondl.patch
-Patch2:		giflib5.patch
-URL:		http://fontforge.sourceforge.net/
-BuildRequires:	autoconf
+Patch1:		%{name}-libexecdir.patch
+URL:		http://fontforge.github.io/
+BuildRequires:	autoconf >= 2.68
 BuildRequires:	automake
-BuildRequires:	cairo-devel >= 1.2
+BuildRequires:	cairo-devel >= 1.6
+BuildRequires:	czmq-devel >= 2.2.0
+BuildRequires:	czmq-devel < 4
 BuildRequires:	fontconfig-devel
-BuildRequires:	freetype-devel >= 2.0.0
+BuildRequires:	freetype-devel >= 1:2.3.7
 BuildRequires:	gettext-tools
 BuildRequires:	giflib-devel
+BuildRequires:	glib2-devel >= 1:2.6
+BuildRequires:	gtk+2-devel >= 1:2.0
+%{?with_python:BuildRequires:	python-ipython}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
-BuildRequires:	libspiro-devel
-BuildRequires:	libtiff-devel
-BuildRequires:	libtool
-BuildRequires:	libuninameslist-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	pango-devel
-BuildRequires:	pkgconfig
+# TODO: 1:0.6 when released
+BuildRequires:	libspiro-devel >= 1:0.2
+BuildRequires:	libtiff-devel >= 4
+BuildRequires:	libltdl-devel >= 2:2
+BuildRequires:	libtool >= 2:2
+# 0.3
+BuildRequires:	libuninameslist-devel >= 20130501
+BuildRequires:	libxml2-devel >= 2.0
+BuildRequires:	pango-devel >= 1:1.10
+BuildRequires:	pkgconfig >= 1:0.25
 BuildRequires:	python-devel >= 2.3
 BuildRequires:	python-modules >= 2.3
+BuildRequires:	readline-devel
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXi-devel
+BuildRequires:	xz
+BuildRequires:	zeromq-devel >= 4.0.4
 BuildRequires:	zlib-devel
-Requires:	cairo >= 1.2
+Requires:	cairo >= 1.6
+Requires:	czmq >= 2.2.0
+Requires:	glib2 >= 1:2.6
 Requires:	iconv
+Requires:	libuninameslist >= 20130501
+Requires:	pango >= 1:1.10
 Obsoletes:	pfaedit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -59,17 +80,17 @@ Summary:	Header files for FontForge libraries
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek FontForge
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	cairo-devel >= 1.2
+Requires:	cairo-devel >= 1.6
 Requires:	fontconfig-devel
-Requires:	freetype-devel >= 2.0.0
+Requires:	freetype-devel >= 1:2.3.7
 Requires:	giflib-devel
 Requires:	libjpeg-devel
 Requires:	libpng-devel
-Requires:	libspiro-devel
-Requires:	libtiff-devel
-Requires:	libuninameslist-devel
-Requires:	libxml2-devel
-Requires:	pango-devel
+Requires:	libspiro-devel >= 1:0.2
+Requires:	libtiff-devel >= 4
+Requires:	libuninameslist-devel >= 20130501
+Requires:	libxml2-devel >= 2.0
+Requires:	pango-devel >= 1:1.10
 Requires:	xorg-lib-libX11-devel
 Requires:	xorg-lib-libXi-devel
 Requires:	zlib-devel
@@ -80,30 +101,74 @@ Header files for FontForge libraries.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe bibliotek FontForge.
 
+%package static
+Summary:	Static FontForge libraries
+Summary(pl.UTF-8):	Statyczne biblioteki FontForge
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static FontForge libraries.
+
+%description static -l pl.UTF-8
+Statyczne biblioteki FontForge.
+
+%package doc
+Summary:	FontForge documentation
+Summary(pl.UTF-8):	Dokumentacja do FontForge
+Group:		Documentation
+
+%description doc
+FontForge documentation.
+
+%description doc -l pl.UTF-8
+Dokumentacja do FontForge.
+
+%package -n python-fontforge
+Summary:	Python bindings for FontForge libraries
+Summary(pl.UTF-8):	Wiązania Pythona do bibliotek FontForge
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+
+%description -n python-fontforge
+Python bindings for FontForge libraries.
+
+%description -n python-fontforge -l pl.UTF-8
+Wiązania Pythona do bibliotek FontForge.
+
 %prep
-%setup -q -n %{name}-%{version}-b
+%setup -q -n %{name}-2.0.%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
-	--enable-type3 \
-	--enable-multilayer \
+	PO_TRACE=/usr/bin/potrace \
+	UPDATE_MIME_DATABASE=/usr/bin/update-mime-database \
+	UPDATE_DESKTOP_DATABASE=/usr/bin/update-desktop-database \
+	--enable-debug-raw-points \
 	--enable-devicetables \
-	--enable-longdouble \
 	--enable-gb12345 \
+	--enable-gtk2-use \
+	--enable-longdouble \
+	--enable-multilayer \
 	--enable-pasteafter \
-	--enable-tilepath \
 	--enable-pyextension \
+	--enable-python-even \
+	--disable-silent-rules \
+	--enable-tile-path \
+	--enable-type3 \
+	--enable-write-pfm \
+	--with-cairo \
 	--with-freetype-bytecode \
-	--with-regular-link \
 	--without-freetype-src \
 	--with-pango \
-	--with-cairo \
+	--with-regular-link \
 	--with-x
 
 %{__make}
@@ -114,7 +179,12 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libfontforge.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/lib*.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/fontforge/plugins/*.la
+%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/*.la
+%if %{with static_libs}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/fontforge/plugins/*.a
+%endif
 
 %find_lang FontForge
 
@@ -126,22 +196,35 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f FontForge.lang
 %defattr(644,root,root,755)
-%doc AUTHORS LICENSE README-Unix.html
+%doc AUTHORS LICENSE doc/{README-unix,README-Unix.html}
 %attr(755,root,root) %{_bindir}/fontforge
 %attr(755,root,root) %{_bindir}/fontimage
 %attr(755,root,root) %{_bindir}/fontlint
 %attr(755,root,root) %{_bindir}/sfddiff
 %attr(755,root,root) %{_libdir}/libfontforge.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfontforge.so.1
+%attr(755,root,root) %ghost %{_libdir}/libfontforge.so.2
+%attr(755,root,root) %{_libdir}/libfontforgeexe.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfontforgeexe.so.2
 %attr(755,root,root) %{_libdir}/libgdraw.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgdraw.so.4
+%attr(755,root,root) %ghost %{_libdir}/libgdraw.so.5
 %attr(755,root,root) %{_libdir}/libgioftp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgioftp.so.1
+%attr(755,root,root) %ghost %{_libdir}/libgioftp.so.2
 %attr(755,root,root) %{_libdir}/libgunicode.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgunicode.so.3
+%attr(755,root,root) %ghost %{_libdir}/libgunicode.so.4
 %attr(755,root,root) %{_libdir}/libgutils.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libgutils.so.1
+%attr(755,root,root) %ghost %{_libdir}/libgutils.so.2
+%attr(755,root,root) %{_libdir}/libzmqcollab.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libzmqcollab.so.2
+%dir %{_libdir}/fontforge
+%dir %{_libdir}/fontforge/plugins
+%attr(755,root,root) %{_libdir}/fontforge/plugins/gb12345.so
+%dir %{_libexecdir}/FontForgeInternal
+%attr(755,root,root) %{_libexecdir}/FontForgeInternal/fontforge-internal-collab-server
 %{_datadir}/fontforge
+%{_datadir}/mime/packages/fontforge.xml
+%{_desktopdir}/fontforge.desktop
+%{_iconsdir}/hicolor/*x*/apps/fontforge.png
+%{_iconsdir}/hicolor/scalable/apps/fontforge.svg
 %{_mandir}/man1/fontforge.1*
 %{_mandir}/man1/fontimage.1*
 %{_mandir}/man1/fontlint.1*
@@ -150,13 +233,33 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfontforge.so
+%attr(755,root,root) %{_libdir}/libfontforgeexe.so
 %attr(755,root,root) %{_libdir}/libgdraw.so
 %attr(755,root,root) %{_libdir}/libgioftp.so
 %attr(755,root,root) %{_libdir}/libgunicode.so
 %attr(755,root,root) %{_libdir}/libgutils.so
-%{_libdir}/libgdraw.la
-%{_libdir}/libgioftp.la
-%{_libdir}/libgunicode.la
-%{_libdir}/libgutils.la
+%attr(755,root,root) %{_libdir}/libzmqcollab.so
 %{_includedir}/fontforge
-%{_pkgconfigdir}/fontforge.pc
+%{_pkgconfigdir}/libfontforge.pc
+%{_pkgconfigdir}/libfontforgeexe.pc
+
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libfontforge.a
+%{_libdir}/libfontforgeexe.a
+%{_libdir}/libgdraw.a
+%{_libdir}/libgioftp.a
+%{_libdir}/libgunicode.a
+%{_libdir}/libgutils.a
+%{_libdir}/libzmqcollab.a
+%endif
+
+%files doc
+%defattr(644,root,root,755)
+%{_docdir}/fontforge
+
+%files -n python-fontforge
+%defattr(644,root,root,755)
+%attr(755,root,root) %{py_sitedir}/fontforge.so
+%attr(755,root,root) %{py_sitedir}/psMat.so

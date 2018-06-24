@@ -21,7 +21,6 @@ BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.6
 BuildRequires:	czmq-devel >= 2.2.0
 BuildRequires:	czmq-devel < 4
-BuildRequires:	fontconfig-devel
 BuildRequires:	freetype-devel >= 1:2.3.7
 BuildRequires:	gettext-tools
 BuildRequires:	giflib-devel
@@ -51,6 +50,7 @@ BuildRequires:	zeromq-devel >= 4.0.4
 BuildRequires:	zlib-devel
 Requires:	cairo >= 1.6
 Requires:	czmq >= 2.2.0
+Requires:	freetype >= 1:2.3.7
 Requires:	glib2 >= 1:2.6
 Requires:	iconv
 Requires:	libuninameslist >= 20130501
@@ -81,18 +81,16 @@ Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek FontForge
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	cairo-devel >= 1.6
-Requires:	fontconfig-devel
 Requires:	freetype-devel >= 1:2.3.7
 Requires:	giflib-devel
 Requires:	libjpeg-devel
+Requires:	libltdl-devel
 Requires:	libpng-devel
 Requires:	libspiro-devel >= 1:0.2
 Requires:	libtiff-devel >= 4
 Requires:	libuninameslist-devel >= 20130501
-Requires:	libxml2-devel >= 2.0
 Requires:	pango-devel >= 1:1.10
 Requires:	xorg-lib-libX11-devel
-Requires:	xorg-lib-libXi-devel
 Requires:	zlib-devel
 
 %description devel

@@ -27,3 +27,32 @@
  	po \
  	pycontrib \
  	share \
+--- fontforge-2.0.20170731/m4/fontforge_create_pkg-config_files.m4.orig	2017-07-22 07:00:39.158252006 +0200
++++ fontforge-2.0.20170731/m4/fontforge_create_pkg-config_files.m4	2018-06-24 09:03:38.755879927 +0200
+@@ -30,7 +30,7 @@
+ test x"${i_do_have_libuninameslist}" = xyes && test x"${with_libuninameslist}" != xno && __private_deps="${__private_deps} ${LIBUNINAMESLIST_LIBS}"
+ test x"${i_do_have_libunicodenames}" = xyes && __private_deps="${__private_deps} ${LIBUNICODENAMES_LIBS}"
+ test x"${i_do_have_libreadline}" = xyes && test x"${with_libreadline}" != xno && __private_deps="${__private_deps} ${LIBREADLINE_LIBS}"
+-test x"${i_do_have_x}" = xyes && __private_deps="${__private_deps} ${X_PRE_LIBS} ${X_LIBS} ${X_EXTRA_LIBS}"
++test x"${i_do_have_x}" = xyes && __private_deps="${__private_deps} ${X_LIBS} ${X_EXTRA_LIBS}"
+ __private_deps="${__private_deps} ${PTHREAD_LIBS}"
+ __private_deps="${__private_deps} ${LIBLTDL}"
+ __private_deps="${__private_deps} ${LIBS}"
+@@ -41,14 +41,14 @@
+ AC_SUBST([LIBFONTFORGE_PKGCONFIG_VERSION],["${__cleaned_version}"])
+ AC_SUBST([LIBFONTFORGE_PKGCONFIG_REQUIRES],[])
+ AC_SUBST([LIBFONTFORGE_PKGCONFIG_REQUIRES_PRIVATE],["${__pkg_deps}"])
+-AC_SUBST([LIBFONTFORGE_PKGCONFIG_LIBS],["-L${libdir} -lfontforge"])
++AC_SUBST([LIBFONTFORGE_PKGCONFIG_LIBS],["-lfontforge"])
+ AC_SUBST([LIBFONTFORGE_PKGCONFIG_LIBS_PRIVATE],["${__private_deps}"])
+ 
+ AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_VERSION],["${__cleaned_version}"])
+ AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_REQUIRES],[])
+ AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_REQUIRES_PRIVATE],["libfontforge ${__pkg_deps}"])
+-AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_LIBS],["-L${libdir} -lfontforgeexe"])
+-AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_LIBS_PRIVATE],["-L${libdir} ${__private_exe_deps} ${__private_deps}"])
++AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_LIBS],["-lfontforgeexe"])
++AC_SUBST([LIBFONTFORGEEXE_PKGCONFIG_LIBS_PRIVATE],["${__private_exe_deps} ${__private_deps}"])
+ 
+ AC_CONFIG_FILES([libfontforge.pc])
+ AC_CONFIG_FILES([libfontforgeexe.pc])

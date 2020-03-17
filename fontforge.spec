@@ -7,7 +7,7 @@ Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
 Version:	20170731
-Release:	2
+Release:	3
 License:	GPL v3+ with BSD parts
 Group:		X11/Applications/Publishing
 #Source0Download: https://github.com/fontforge/fontforge/releases
@@ -138,6 +138,20 @@ Wiązania Pythona do bibliotek FontForge.
 %setup -q -n %{name}-2.0.%{version}
 %patch0 -p1
 %patch1 -p1
+
+%{__sed} -E -i -e '1s,#!\s*/usr/bin/python(\s|$),#!%{__python}\1,' \
+      pycontrib/gdraw/__init__.py \
+      pycontrib/gdraw/gdraw.py \
+      pycontrib/graphicore/ipython_view.py \
+      pycontrib/graphicore/shell.py
+
+%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+fontforge(\s|$),#!%{_bindir}/fontforge\1,' \
+      pycontrib/simple/expand-a.py \
+      pycontrib/simple/load-font-and-show-name.py \
+      pycontrib/collab/sessionjoin-and-change-c.py \
+      pycontrib/collab/sessionjoin-and-save-to-out.sfd.py \
+      pycontrib/collab/sessionstart.py \
+      pycontrib/collab/web-test-collab.py
 
 %build
 %{__libtoolize}

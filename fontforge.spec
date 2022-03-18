@@ -6,14 +6,14 @@
 Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20200314
-Release:	3
+Version:	20201107
+Release:	1
 License:	GPL v3+ with BSD parts
 Group:		X11/Applications/Publishing
 #Source0Download: https://github.com/fontforge/fontforge/releases
 Source0:	https://github.com/fontforge/fontforge/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	a1f0cf790a659dc28ab7a3b8c4c0279b
-URL:		http://fontforge.github.io/
+# Source0-md5:	efc0b3c79ba576133de70d67ccadcf24
+URL:		https://fontforge.org/
 BuildRequires:	cairo-devel >= 1.6
 BuildRequires:	cmake >= 3.5
 BuildRequires:	freetype-devel >= 1:2.3.7
@@ -52,7 +52,7 @@ Requires:	pango >= 1:1.10
 # API and plugins support withdrawn
 Obsoletes:	fontforge-devel < 20190413
 Obsoletes:	fontforge-static < 20190413
-Obsoletes:	pfaedit
+Obsoletes:	pfaedit < 040311
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description

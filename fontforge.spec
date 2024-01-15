@@ -6,13 +6,14 @@
 Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20201107
-Release:	4
+Version:	20230101
+Release:	1
 License:	GPL v3+ with BSD parts
 Group:		X11/Applications/Publishing
 #Source0Download: https://github.com/fontforge/fontforge/releases
 Source0:	https://github.com/fontforge/fontforge/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	efc0b3c79ba576133de70d67ccadcf24
+# Source0-md5:	7043f25368ed25bcd75d168564919fb7
+Patch0:		%{name}-po.patch
 URL:		https://fontforge.org/
 BuildRequires:	cairo-devel >= 1.6
 BuildRequires:	cmake >= 3.5
@@ -22,20 +23,20 @@ BuildRequires:	gcc >= 5:3.2
 BuildRequires:	giflib-devel
 BuildRequires:	glib2-devel >= 1:2.6
 BuildRequires:	gtk+3-devel >= 3.10
+BuildRequires:	libbrotli-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libspiro-devel >= 1:0.6
 BuildRequires:	libstdc++-devel >= 1:4.7
 BuildRequires:	libtiff-devel >= 4
 BuildRequires:	libltdl-devel >= 2:2
-# 0.3
-BuildRequires:	libuninameslist-devel >= 20130501
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	pango-devel >= 1:1.10
 BuildRequires:	pkgconfig >= 1:0.25
-BuildRequires:	python3-devel >= 1:3.3
-BuildRequires:	python3-modules >= 1:3.3
+BuildRequires:	python3-devel >= 1:3.6
+BuildRequires:	python3-modules >= 1:3.6
 BuildRequires:	readline-devel
+BuildRequires:	sphinx-pdg
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	woff2-devel
 BuildRequires:	xorg-lib-libX11-devel
@@ -47,7 +48,6 @@ Requires:	freetype >= 1:2.3.7
 Requires:	glib2 >= 1:2.6
 Requires:	gtk+3 >= 3.10
 Requires:	iconv
-Requires:	libuninameslist >= 20130501
 Requires:	pango >= 1:1.10
 # API and plugins support withdrawn
 Obsoletes:	fontforge-devel < 20190413
@@ -85,7 +85,6 @@ Requires:	libltdl-devel
 Requires:	libpng-devel
 Requires:	libspiro-devel >= 1:0.6
 Requires:	libtiff-devel >= 4
-Requires:	libuninameslist-devel >= 20130501
 Requires:	pango-devel >= 1:1.10
 Requires:	xorg-lib-libX11-devel
 Requires:	zlib-devel
@@ -134,6 +133,7 @@ Wiązania Pythona do bibliotek FontForge.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' \
 	pycontrib/svg2glyph/svg2glyph
@@ -186,10 +186,20 @@ rm -rf $RPM_BUILD_ROOT
 %files -f FontForge.lang
 %defattr(644,root,root,755)
 %doc AUTHORS LICENSE README.md
+%attr(755,root,root) %{_bindir}/acorn2sfd
+%attr(755,root,root) %{_bindir}/dewoff
+%attr(755,root,root) %{_bindir}/findtable
 %attr(755,root,root) %{_bindir}/fontforge
 %attr(755,root,root) %{_bindir}/fontimage
 %attr(755,root,root) %{_bindir}/fontlint
+%attr(755,root,root) %{_bindir}/pcl2ttf
+%attr(755,root,root) %{_bindir}/pfadecrypt
+%attr(755,root,root) %{_bindir}/rmligamarks
 %attr(755,root,root) %{_bindir}/sfddiff
+%attr(755,root,root) %{_bindir}/showttf
+%attr(755,root,root) %{_bindir}/stripttc
+%attr(755,root,root) %{_bindir}/ttf2eps
+%attr(755,root,root) %{_bindir}/woff
 %attr(755,root,root) %{_libdir}/libfontforge.so.4
 %{_datadir}/fontforge
 %{_datadir}/metainfo/org.fontforge.FontForge.appdata.xml
@@ -197,12 +207,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_desktopdir}/org.fontforge.FontForge.desktop
 %{_iconsdir}/hicolor/*x*/apps/org.fontforge.FontForge.png
 %{_iconsdir}/hicolor/scalable/apps/org.fontforge.FontForge.svg
-%{_pixmapsdir}/org.fontforge.FontForge.png
-%{_pixmapsdir}/org.fontforge.FontForge.xpm
+%{_mandir}/man1/acorn2sfd.1*
 %{_mandir}/man1/fontforge.1*
 %{_mandir}/man1/fontimage.1*
 %{_mandir}/man1/fontlint.1*
 %{_mandir}/man1/sfddiff.1*
+%{_mandir}/man1/showttf.1*
+%{_mandir}/man1/ttf2eps.1*
 
 %files doc
 %defattr(644,root,root,755)

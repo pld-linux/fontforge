@@ -7,7 +7,7 @@ Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
 Version:	20230101
-Release:	1
+Release:	2
 License:	GPL v3+ with BSD parts
 Group:		X11/Applications/Publishing
 #Source0Download: https://github.com/fontforge/fontforge/releases
@@ -173,6 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 # API no longer exported
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libfontforge.so
 
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/ka{_GE,}
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/tr{_TR,}
 
 %find_lang FontForge

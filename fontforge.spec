@@ -133,7 +133,7 @@ Wiązania Pythona do bibliotek FontForge.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' \
 	pycontrib/svg2glyph/svg2glyph

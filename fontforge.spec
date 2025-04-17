@@ -162,7 +162,9 @@ cd build
 
 %{__make}
 
+%if %{with doc}
 %{__rm} doc/sphinx-docs/{.buildinfo,.nojekyll,objects.inv}
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -216,6 +218,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/showttf.1*
 %{_mandir}/man1/ttf2eps.1*
 
+%if %{with doc}
 %files doc
 %defattr(644,root,root,755)
 %dir %{_docdir}/fontforge
@@ -232,6 +235,7 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ja) %{_docdir}/fontforge/old/ja
 %{_docdir}/fontforge/*.html
 %{_docdir}/fontforge/*.js
+%endif
 
 %files -n python3-fontforge
 %defattr(644,root,root,755)

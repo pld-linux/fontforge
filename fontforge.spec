@@ -6,14 +6,13 @@
 Summary:	An outline font editor
 Summary(pl.UTF-8):	Edytor fontów rysowanych
 Name:		fontforge
-Version:	20230101
-Release:	6
+Version:	20251009
+Release:	1
 License:	GPL v3+ with BSD parts
 Group:		X11/Applications/Publishing
 #Source0Download: https://github.com/fontforge/fontforge/releases
 Source0:	https://github.com/fontforge/fontforge/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	7043f25368ed25bcd75d168564919fb7
-Patch0:		%{name}-po.patch
+# Source0-md5:	9407db5126f937618f1f5f1f9ee8aab2
 URL:		https://fontforge.org/
 BuildRequires:	cairo-devel >= 1.6
 BuildRequires:	cmake >= 3.5
@@ -23,30 +22,31 @@ BuildRequires:	gcc >= 5:3.2
 BuildRequires:	giflib-devel
 BuildRequires:	glib2-devel >= 1:2.6
 BuildRequires:	gtk+3-devel >= 3.10
+BuildRequires:	gtkmm3-devel >= 3.0
+BuildRequires:	harfbuzz-devel >= 10.2.0
 BuildRequires:	libbrotli-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libspiro-devel >= 1:0.6
-BuildRequires:	libstdc++-devel >= 1:4.7
+BuildRequires:	libstdc++-devel >= 1:7
 BuildRequires:	libtiff-devel >= 4
 BuildRequires:	libltdl-devel >= 2:2
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	pango-devel >= 1:1.10
 BuildRequires:	pkgconfig >= 1:0.25
-BuildRequires:	python3-devel >= 1:3.6
-BuildRequires:	python3-modules >= 1:3.6
+BuildRequires:	python3-devel >= 1:3.8
+BuildRequires:	python3-modules >= 1:3.8
 BuildRequires:	readline-devel
-BuildRequires:	sphinx-pdg
+BuildRequires:	sphinx-pdg >= 2
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	woff2-devel
-BuildRequires:	xorg-lib-libX11-devel
-BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xz
 BuildRequires:	zlib-devel
 Requires:	cairo >= 1.6
 Requires:	freetype >= 1:2.3.7
 Requires:	glib2 >= 1:2.6
 Requires:	gtk+3 >= 3.10
+Requires:	harfbuzz >= 10.2.0
 Requires:	iconv
 Requires:	pango >= 1:1.10
 # API and plugins support withdrawn
@@ -72,41 +72,6 @@ OpenType (Type2) i fonty z kluczami CID.
 
 FontForge wcześniej nazywał się PfaEdit.
 
-%package devel
-Summary:	Header files for FontForge libraries
-Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek FontForge
-Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	cairo-devel >= 1.6
-Requires:	freetype-devel >= 1:2.3.7
-Requires:	giflib-devel
-Requires:	libjpeg-devel
-Requires:	libltdl-devel
-Requires:	libpng-devel
-Requires:	libspiro-devel >= 1:0.6
-Requires:	libtiff-devel >= 4
-Requires:	pango-devel >= 1:1.10
-Requires:	xorg-lib-libX11-devel
-Requires:	zlib-devel
-
-%description devel
-Header files for FontForge libraries.
-
-%description devel -l pl.UTF-8
-Pliki nagłówkowe bibliotek FontForge.
-
-%package static
-Summary:	Static FontForge libraries
-Summary(pl.UTF-8):	Statyczne biblioteki FontForge
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-
-%description static
-Static FontForge libraries.
-
-%description static -l pl.UTF-8
-Statyczne biblioteki FontForge.
-
 %package doc
 Summary:	FontForge documentation
 Summary(pl.UTF-8):	Dokumentacja do FontForge
@@ -123,6 +88,7 @@ Summary:	Python bindings for FontForge libraries
 Summary(pl.UTF-8):	Wiązania Pythona do bibliotek FontForge
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
+Requires:	python3-libs >= 1:3.8
 Obsoletes:	python-fontforge < 20200314
 
 %description -n python3-fontforge
@@ -133,7 +99,6 @@ Wiązania Pythona do bibliotek FontForge.
 
 %prep
 %setup -q
-%patch -P 0 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' \
 	pycontrib/svg2glyph/svg2glyph
@@ -176,6 +141,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libfontforge.so
 
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/ka{_GE,}
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/th{_TH,}
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/tr{_TR,}
 
 %find_lang FontForge
